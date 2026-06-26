@@ -1,0 +1,35 @@
+{
+  "name": "@ardregistry/cli",
+  "version": "0.1.0",
+  "description": "ARD Registry CLI — search and navigate AI capability catalogs from your terminal",
+  "author": "ARD Registry",
+  "license": "MIT",
+  "bin": {
+    "ard": "./bin/cli.js"
+  },
+  "main": "./dist/index.js",
+  "files": [
+    "bin",
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "axios": "^1.18.1",
+    "commander": "^15.0.0",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "tsx": "^4.0.0",
+    "typescript": "^5",
+    "vitest": "^3.0.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
