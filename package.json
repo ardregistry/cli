@@ -4,13 +4,34 @@
   "description": "ARD Registry CLI — search and navigate AI capability catalogs from your terminal",
   "author": "ARD Registry",
   "license": "MIT",
+  "homepage": "https://ardregistry.org",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shaharluftig/ardregistry-cli.git"
+  },
+  "bugs": {
+    "url": "https://github.com/shaharluftig/ardregistry-cli/issues"
+  },
+  "keywords": [
+    "ard",
+    "ai",
+    "mcp",
+    "agent",
+    "catalog",
+    "registry",
+    "cli",
+    "discovery",
+    "a2a",
+    "skills"
+  ],
   "bin": {
     "ard": "bin/cli.js"
   },
   "main": "./dist/index.js",
   "files": [
     "bin",
-    "dist"
+    "dist",
+    "README.md"
   ],
   "scripts": {
     "build": "tsc",
