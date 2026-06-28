@@ -5,7 +5,7 @@
   "author": "ARD Registry",
   "license": "MIT",
   "bin": {
-    "ard": "./bin/cli.js"
+    "ard": "bin/cli.js"
   },
   "main": "./dist/index.js",
   "files": [
