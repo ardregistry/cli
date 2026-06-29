@@ -1,6 +1,6 @@
 {
   "name": "@ardregistry/cli",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "ARD Registry CLI — search and navigate AI capability catalogs from your terminal",
   "author": "ARD Registry",
   "license": "MIT",
