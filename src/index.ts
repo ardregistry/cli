@@ -1,12 +1,25 @@
 import { Command } from 'commander';
 import { searchRegistry, navigateRegistry } from './client';
 
+const useColor = (process.stdout.isTTY || !!process.env.FORCE_COLOR) && !process.env.NO_COLOR;
+
+const c = {
+  reset: useColor ? '\x1b[0m' : '',
+  bold: useColor ? '\x1b[1m' : '',
+  dim: useColor ? '\x1b[2m' : '',
+  green: useColor ? '\x1b[32m' : '',
+  cyan: useColor ? '\x1b[36m' : '',
+  yellow: useColor ? '\x1b[33m' : '',
+  magenta: useColor ? '\x1b[35m' : '',
+  red: useColor ? '\x1b[31m' : '',
+};
+
 const program = new Command();
 
 program
   .name('ard')
   .description('The official ARD Registry CLI')
-  .version('0.3.1');
+  .version('0.3.2');
 
 program
   .command('search')
@@ -20,7 +33,7 @@ program
     const filterType = options.type;
     const limit = parseInt(options.limit, 10);
 
-    console.log(`\nSearching registry at ${registryUrl} for "${query}"...\n`);
+    console.log(`\nSearching registry at ${c.cyan}${registryUrl}${c.reset} for "${c.bold}${query}${c.reset}"...\n`);
 
     try {
       const results = await searchRegistry(query, {
@@ -36,35 +49,43 @@ program
 
       results.forEach((r) => {
         const typeLabel = r.type || 'Resource';
-        console.log(`[${typeLabel}] ${r.displayName}`);
-        console.log(`  URN:    ${r.identifier}`);
-        console.log(`  Source: ${r.source}`);
-        console.log(`  Score:  ${r.score}%`);
+        let typeColor = c.cyan;
+        const normalizedType = typeLabel.toLowerCase();
+        if (normalizedType.includes('mcp')) typeColor = c.green;
+        else if (normalizedType.includes('skill')) typeColor = c.yellow;
+        else if (normalizedType.includes('agent')) typeColor = c.magenta;
+
+        console.log(`${c.bold}${typeColor}[${typeLabel}]${c.reset} ${c.bold}${r.displayName}${c.reset}`);
+        console.log(`  ${c.dim}URN:${c.reset}    ${r.identifier}`);
+        console.log(`  ${c.dim}Source:${c.reset} ${c.cyan}${r.source || 'unknown'}${c.reset}`);
+        if (r.score !== undefined) {
+          console.log(`  ${c.dim}Score:${c.reset}  ${c.green}${r.score}%${c.reset}`);
+        }
         if (r.description) {
-          console.log(`  Desc:   ${r.description}`);
+          console.log(`  ${c.dim}Desc:${c.reset}   ${r.description}`);
         }
         console.log('');
       });
     } catch (e: any) {
-      console.error(`Registry search failed: ${e.message}`);
+      console.error(`${c.bold}${c.red}Registry search failed:${c.reset} ${e.message}`);
       process.exit(1);
     }
   });
 
 program
   .command('navigate')
-  .description('Perform local federated navigation starting from a catalog URL')
+  .description('Crawl and search capability catalogs starting from a domain URL')
   .argument('<url>', 'Starting URL or domain hosting an ai-catalog.json')
   .argument('<query>', 'Local keyword filter')
   .option('-d, --depth <maxDepth>', 'Maximum crawl recursion depth', '2')
   .action(async (url, query, options) => {
     const depth = parseInt(options.depth, 10);
 
-    console.log(`\nRunning local federated navigation starting at ${url} for "${query}" (depth limit: ${depth})...\n`);
+    console.log(`\nScanning catalog tree starting at ${c.cyan}${url}${c.reset} for "${c.bold}${query}${c.reset}" (depth limit: ${depth})...\n`);
 
     try {
       const results = await navigateRegistry(url, query, { depth });
-      console.log(`\nFederated search complete. Found ${results.length} matches:\n`);
+      console.log(`\nScan complete. Found ${c.bold}${results.length}${c.reset} matches:\n`);
 
       if (results.length === 0) {
         console.log('No local matches found in catalog tree.');
@@ -73,16 +94,22 @@ program
 
       results.forEach((r) => {
         const typeLabel = r.type || 'Resource';
-        console.log(`[${typeLabel}] ${r.displayName}`);
-        console.log(`  URN:    ${r.identifier}`);
-        console.log(`  Source: ${r.source}`);
+        let typeColor = c.cyan;
+        const normalizedType = typeLabel.toLowerCase();
+        if (normalizedType.includes('mcp')) typeColor = c.green;
+        else if (normalizedType.includes('skill')) typeColor = c.yellow;
+        else if (normalizedType.includes('agent')) typeColor = c.magenta;
+
+        console.log(`${c.bold}${typeColor}[${typeLabel}]${c.reset} ${c.bold}${r.displayName}${c.reset}`);
+        console.log(`  ${c.dim}URN:${c.reset}    ${r.identifier}`);
+        console.log(`  ${c.dim}Source:${c.reset} ${c.cyan}${r.source || 'local'}${c.reset}`);
         if (r.description) {
-          console.log(`  Desc:   ${r.description}`);
+          console.log(`  ${c.dim}Desc:${c.reset}   ${r.description}`);
         }
         console.log('');
       });
     } catch (e: any) {
-      console.error(`Navigation crawl failed: ${e.message}`);
+      console.error(`${c.bold}${c.red}Navigation crawl failed:${c.reset} ${e.message}`);
       process.exit(1);
     }
   });

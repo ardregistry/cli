@@ -67,8 +67,25 @@ export async function searchRegistry(query: string, options: SearchOptions = {})
     timeout: 5000,
   });
 
-  const parsedResponse = SearchResponseSchema.parse(response.data);
-  return parsedResponse.results;
+  try {
+    const parsedResponse = SearchResponseSchema.parse(response.data);
+    return parsedResponse.results;
+  } catch (e) {
+    if (e instanceof z.ZodError) {
+      throw new Error(`Invalid search response from registry:\n${formatZodError(e)}`);
+    }
+    throw e;
+  }
+}
+
+/**
+ * Formats a Zod schema validation error into a readable bulleted list.
+ */
+function formatZodError(error: z.ZodError): string {
+  return error.issues.map((err) => {
+    const pathStr = err.path.join('.') || 'root';
+    return `- ${pathStr}: ${err.message}`;
+  }).join('\n');
 }
 
 /**
@@ -123,7 +140,16 @@ export async function navigateRegistry(startUrl: string, query: string, options:
     }
 
     // Validate the parsed catalog using CatalogSchema
-    const catalog = CatalogSchema.parse(rawCatalog);
+    let catalog;
+    try {
+      catalog = CatalogSchema.parse(rawCatalog);
+    } catch (e) {
+      if (e instanceof z.ZodError) {
+        console.warn(`\n⚠️  Skipping catalog at ${url} due to validation errors:\n${formatZodError(e)}\n`);
+        return;
+      }
+      throw e;
+    }
     const capabilities = catalog.capabilities || catalog.entries || [];
     let sourceDomain = 'unknown';
     try {

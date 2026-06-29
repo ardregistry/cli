@@ -1,6 +1,6 @@
 {
   "name": "@ardregistry/cli",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "The official ARD Registry CLI and client library. Search and navigate MCP servers, A2A agents, and AI skills by intent, at runtime.",
   "author": "ARD Registry",
   "license": "MIT",
