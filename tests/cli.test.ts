@@ -269,7 +269,7 @@ describe('CLI Client Library Tests', () => {
           `node bin/cli.js navigate http://127.0.0.1:${port} "federated"`
         );
 
-        expect(output).toContain(`Running local federated navigation starting at http://127.0.0.1:${port}`);
+        expect(output).toContain(`Scanning catalog tree starting at http://127.0.0.1:${port}`);
         expect(output).toContain('[skill] Federated Search Skill');
         expect(output).toContain('URN:    urn:ai:search-skill');
         expect(output).toContain('Desc:   A skill for testing navigation');
