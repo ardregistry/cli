@@ -5,8 +5,8 @@ const program = new Command();
 
 program
   .name('ard')
-  .description('ARD Registry Client CLI tool')
-  .version('0.1.0');
+  .description('The official ARD Registry CLI')
+  .version('0.3.1');
 
 program
   .command('search')

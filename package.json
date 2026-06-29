@@ -1,28 +1,31 @@
 {
   "name": "@ardregistry/cli",
   "version": "0.3.1",
-  "description": "ARD Registry CLI — search and navigate AI capability catalogs from your terminal",
+  "description": "The official ARD Registry CLI and client library. Search and navigate MCP servers, A2A agents, and AI skills by intent, at runtime.",
   "author": "ARD Registry",
   "license": "MIT",
-  "homepage": "https://ardregistry.org",
+  "homepage": "https://github.com/ardregistry/cli#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/shaharluftig/ardregistry-cli.git"
+    "url": "git+https://github.com/ardregistry/cli.git"
   },
   "bugs": {
-    "url": "https://github.com/shaharluftig/ardregistry-cli/issues"
+    "url": "https://github.com/ardregistry/cli/issues"
   },
   "keywords": [
-    "ard",
-    "ai",
-    "mcp",
-    "agent",
-    "catalog",
-    "registry",
+    "Agentic Resource Discovery",
+    "ARD",
+    "Model Context Protocol",
+    "MCP",
+    "ai-catalog.json",
+    "AEO",
+    "Agent Engine Optimization",
+    "AI Agent Directory",
+    "mcp-server",
+    "ai-skill",
+    "a2a-agent",
     "cli",
-    "discovery",
-    "a2a",
-    "skills"
+    "terminal"
   ],
   "bin": {
     "ard": "bin/cli.js"
@@ -31,7 +34,8 @@
   "files": [
     "bin",
     "dist",
-    "README.md"
+    "README.md",
+    "LICENSE"
   ],
   "scripts": {
     "build": "tsc",
